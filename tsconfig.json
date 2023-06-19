@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+       "strict": true,
+       "target": "es2017",
+       "module": "esnext",
+       "rootDir": "src",
+       "noEmitOnError": true,
+       "lib": ["ES2021", "dom"]
+    }
+ }

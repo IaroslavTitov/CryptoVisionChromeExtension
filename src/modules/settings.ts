@@ -1,6 +1,8 @@
 // Storage variable names
 export const STOR_VISION_ENABLED = "crypto_vision_enabled"
 export const STOR_COIN_DATA = "crypto_vision_coin_data"
+export const STOR_NEXT_LOAD_TIMESTAMP = "crypto_vision_next_load_timestamp"
+export const STOR_DATA_PAGE_INDEX = "crypto_vision_data_page_index"
 
 // CSS 
 export const CSS_ACTIVE = "active"
@@ -24,7 +26,6 @@ export let ELEMENTS_PROHIBITED_TO_OVERRIDE = [
 
 // Coin Data Loader Settings
 // This is in milliseconds
-export const COIN_DATA_LOAD_FREQUENCY = 80000
-export const THROTTLING_WAIT_PERIOD = 300000
+export const WAIT_PERIOD = 300000
 export const COIN_DATA_LOAD_STAGGER_PERIOD = 20000
 export const COIN_DATA_PAGES = 4

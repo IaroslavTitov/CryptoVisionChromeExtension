@@ -4,6 +4,7 @@ module.exports = {
    mode: "production",
    entry: {
       content_script_main: path.resolve(__dirname, "..", "src", "content_script_main.ts"),
+      service_worker: path.resolve(__dirname, "..", "src", "service_worker.ts"),
       popup_main: path.resolve(__dirname, "..", "src", "popup_main.ts"),
    },
    output: {

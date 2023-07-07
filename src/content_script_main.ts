@@ -13,13 +13,17 @@ chrome.runtime.onMessage.addListener(message => {
 
 // Run highlight logic every 3 seconds when crypto vision is enabled
 setInterval(async () => {
-    if (!document.hasFocus()) return
+    try {
+        if (!document.hasFocus()) return
 
-    let isCryptoVisionEnabled = (await getFromStorage(STOR_VISION_ENABLED) ?? true)
-    if (isCryptoVisionEnabled) {
-        let coinData = await getCoinData()
-        if (coinData.size > 0) {
-            highlight(coinData)
+        let isCryptoVisionEnabled = (await getFromStorage(STOR_VISION_ENABLED) ?? true)
+        if (isCryptoVisionEnabled) {
+            let coinData = await getCoinData()
+            if (coinData.size > 0) {
+                highlight(coinData)
+            }
         }
+    } catch (e) {
+        console.log("Crypto Vision encountered an issue. Reload the page.")
     }
 }, 3000)

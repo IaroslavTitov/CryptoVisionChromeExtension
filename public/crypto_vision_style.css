@@ -65,3 +65,54 @@
     transition: 0.2s;
     color: var(--vision);
 }
+
+#crypto_vision_donation_box span {
+    color: var(--inactive);
+    font-size: 14px;
+    padding-bottom: 10px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+#crypto_vision_donation_links {
+    text-align: left;
+    height: 0;
+    overflow: hidden;
+}
+
+#crypto_vision_donation_box.open #crypto_vision_donation_links {
+    height: auto;
+}
+
+#crypto_vision_donation_links img {
+    width: 16px;
+    display: inline-block;
+}
+
+#crypto_vision_donation_links div {
+    padding-bottom: 5px;
+    margin-left: 15px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+#crypto_vision_donation_links span {
+    font-size: 14px;
+    position: relative;
+    top: -3px;
+    color: var(--vision);
+    font-weight: normal;
+    padding: 0;
+}
+
+#crypto_vision_donation_link_address .normal,
+#crypto_vision_donation_link_address.crypto_vision_copied .copied {
+    display: inline;
+    transition: 0.2s;
+}
+
+#crypto_vision_donation_link_address .copied,
+#crypto_vision_donation_link_address.crypto_vision_copied .normal {
+    display: none;
+    transition: 0.2s;
+}

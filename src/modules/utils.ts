@@ -1,4 +1,5 @@
-import { Message } from "./interfaces";
+import { CoinData, Message } from "./interfaces";
+import { BANNED_TICKERS } from "./settings";
 
 // filter out repeating values
 export function unique(input: any[]) {
@@ -46,4 +47,17 @@ export async function setToStorage(key: string, value: any) {
     if (chrome.runtime?.id) {
         await chrome.storage.local.set({[key]: value})
     }
+}
+
+// Mush all known tickets into a huge regex
+export function generateMasterRegex(coinData: Map<string, CoinData>): RegExp {
+    let allTickers = Array.from(coinData.keys()).filter(key => {
+        if (key.length < 3) 
+            return false
+        if (BANNED_TICKERS.includes(key))
+            return false
+        return true
+    } ).map(key => key.replace(".", "\\.")).join("|")
+
+    return RegExp(`^[^\\d$]*([\\d.,]*\\d+)[\\s]*(${allTickers})`, "gmi");
 }

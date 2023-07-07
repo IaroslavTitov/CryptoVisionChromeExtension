@@ -1,6 +1,7 @@
 import { NODE_STATUS_FOUND, FindInHtmlResult, NODE_STATUS_NOTHING_FOUND, NodeStatus } from "./interfaces";
 import { CSS_ACTIVATED_CLASS } from "./settings";
 
+
 // Recursively goes through nodes, finding nodes that contain certain strings in their text content
 export function getElementsContaining(coinRegexes: RegExp[]) {
     let masterList: HTMLElement[] = []
@@ -109,4 +110,42 @@ function findIndexNotInTag(html: string, target: string, startingIndex: number):
     } while (tagFlag || quoteFlag || activatedFlag)
 
     return foundTarget
+}
+
+export function validateDistanceBetweenElements(element: HTMLElement, amount: string, ticker: string) {
+    let amountElement = findChildElementWithText(element, amount)
+    let tickerElement = findChildElementWithText(element, ticker)
+    if (amountElement == tickerElement) return true
+
+    let amountRect = amountElement!!.getBoundingClientRect();
+    let tickerRect = tickerElement!!.getBoundingClientRect();
+    let amountDiagonal = Math.hypot(amountRect.right - amountRect.left, amountRect.bottom - amountRect.top)
+    let tickerDiagonal = Math.hypot(tickerRect.right - tickerRect.left, tickerRect.bottom - tickerRect.top)
+    let distance = Math.hypot(tickerRect.left - amountRect.right, tickerRect.bottom - amountRect.bottom)
+    
+    return distance < (tickerDiagonal + amountDiagonal)/2
+}
+
+function findChildElementWithText(element: HTMLElement, target: string): HTMLElement|null {
+    let children = Array.from(element.childNodes).filter(child => child instanceof HTMLElement).map(child => child as HTMLElement)
+
+    if (children.length == 0) {
+        if (element.textContent?.includes(target)) {
+            return element
+        }
+        return null
+    } else {
+        let foundChildren = children.map(child =>
+            findChildElementWithText(child, target)
+        ).filter(v => v != null)
+
+        if (foundChildren.length > 0) {
+            return foundChildren[0] 
+        } else {
+            if (element.textContent?.includes(target)) {
+                return element
+            }
+            return null
+        }
+    }
 }

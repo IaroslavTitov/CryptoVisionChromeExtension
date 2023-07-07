@@ -7,8 +7,6 @@ export async function loadCoinData(coinData: Map<string, CoinData>): Promise<Map
     let loadTimestamp = await getFromStorage(STOR_NEXT_LOAD_TIMESTAMP)
 
     if (loadTimestamp && loadTimestamp > Date.now()) {
-        let needToWait = (loadTimestamp - Date.now()) / 1000;
-        console.log("Need to wait "+needToWait+" seconds before loading more!")
         return coinData;
     }
 
@@ -45,8 +43,7 @@ export async function loadCoinData(coinData: Map<string, CoinData>): Promise<Map
     } else {
         nextTimestamp += COIN_DATA_LOAD_STAGGER_PERIOD
     }
-    let currentTimestamp = await getFromStorage(STOR_NEXT_LOAD_TIMESTAMP)
-    await setToStorage(STOR_NEXT_LOAD_TIMESTAMP, Math.max(nextTimestamp, currentTimestamp))
+    await setToStorage(STOR_NEXT_LOAD_TIMESTAMP, nextTimestamp)
 
     return coinData
 }
@@ -86,6 +83,8 @@ export async function getCoinData(): Promise<Map<string, CoinData>> {
         if (storedCoinDataJson){
             coinDataMap = new Map(JSON.parse(storedCoinDataJson))
         }
+
+        Array.from(coinDataMap).map(x => console.log(x));
 
         coinDataMap = await loadCoinData(coinDataMap);
 

@@ -1,20 +1,11 @@
 import { CoinData } from "../modules/interfaces";
-import { findInHTML, getElementsContaining } from "../modules/parsingUtils";
+import { findInHTML, getElementsContaining, validateDistanceBetweenElements } from "../modules/parsingUtils";
 import { BANNED_TICKERS, CSS_ACTIVATED_CLASS, CSS_TOOLTIP_CLASS, ELEMENTS_PROHIBITED_TO_OVERRIDE } from "../modules/settings";
-import { toCurrency, unique } from "../modules/utils";
+import { generateMasterRegex, toCurrency, unique } from "../modules/utils";
 
 // This script finds crypto values in page and highlights them
 export function highlight(coinData: Map<string, CoinData>) {
-    // Mush all known tickets into a huge regex
-    let allTickers = Array.from(coinData.keys()).filter(key => {
-        if (key.length < 3) 
-            return false
-        if (BANNED_TICKERS.includes(key))
-            return false
-        return true
-    } ).map(key => key.replace(".", "\\.")).join("|")
-
-    const masterRegex = RegExp(`([\\d.,]*\\d+)[\\s]*(${allTickers})`, "gmi");
+    let masterRegex = generateMasterRegex(coinData);
 
     let allMatches = Array.from(document.body.innerText.matchAll(masterRegex))
     
@@ -52,6 +43,10 @@ function highlightElement(element: HTMLElement, coinRegexes: RegExp[], coinData:
 
                 // Check if there are prohibited tags in between 
                 if (ELEMENTS_PROHIBITED_TO_OVERRIDE.some(x => findResult!!.between.includes(x))) {
+                    continue
+                }
+
+                if (!validateDistanceBetweenElements(element, match[1], match[2])) {
                     continue
                 }
 
